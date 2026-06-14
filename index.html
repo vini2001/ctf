@@ -16,23 +16,12 @@
         <a href="sekurebrowzer://localhost" id="exploit-link">Click to Access Localhost</a>
     </div>
 
+    <div class="in-app-notice">
+        <h1>placeholder</h1>
+    </div>
+
     <script>
-        // 1. Log to the console for debugging via Frida
-        console.log("Exploit page loaded inside SekureBrowzer");
-
-        // 2. Automatically trigger the deep link
-        function triggerExploit() {
-            try {
-                document.getElementById('status').innerText = "Triggering...";
-                // Attempt to force navigation to the internal endpoint
-                window.location.href = "sekurebrowzer://localhost";
-            } catch (e) {
-                document.getElementById('status').innerText = "Error: " + e;
-            }
-        }
-
-        // Delay slightly to ensure WebKit is ready
-        setTimeout(triggerExploit, 1000);
+      
     </script>
 </body>
 </html>
